@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Btn : MonoBehaviour
 {
@@ -9,25 +11,29 @@ public class Btn : MonoBehaviour
     private GameObject TextBoxText;
     private GameObject Dim;
     private GameObject DimBtn;
-    int tasksGuideState = 0;
+    private int tasksGuideState = 0;
     private List<GameData> tasks;
     private string text;
     private List<string[]> tmpList = new List<string[]>();
     private List<string> list = new List<string>();
+    public Sprite[] EggsSprite;
 
     private void Start()
     {
-        TextBox = GameObject.FindGameObjectWithTag("TextBox");
-        TextBoxText = GameObject.FindGameObjectWithTag("TextBoxText");
-        Dim = GameObject.FindGameObjectWithTag("Dim");
-        DimBtn = GameObject.FindGameObjectWithTag("DimBtn");
-        TextBox.SetActive(tasksState);
-        Dim.SetActive(tasksState);
-        DimBtn.SetActive(tasksState);
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            TextBox = GameObject.FindGameObjectWithTag("TextBox");
+            TextBoxText = GameObject.FindGameObjectWithTag("TextBoxText");
+            Dim = GameObject.FindGameObjectWithTag("Dim");
+            DimBtn = GameObject.FindGameObjectWithTag("DimBtn");
+            TextBox.SetActive(tasksState);
+            Dim.SetActive(tasksState);
+            DimBtn.SetActive(tasksState);
 
-        tasks = JsonHandler.ReadJson();
-        handleGuideSteps();
-        Guide();
+            tasks = JsonHandler.ReadJson();
+            handleGuideSteps();
+            Guide();
+        }
     }
 
     private void handleGuideSteps()
@@ -107,5 +113,42 @@ public class Btn : MonoBehaviour
 
     public void FoodsBtn()
     {
+    }
+
+    public void FridgeBtn()
+    {
+        SceneManager.LoadScene("Fridge");
+    }
+
+    private int EggsSpriteState = 0;
+    private bool EggsTaken = false;
+    public void EggsBtn()
+    {
+        if (EggsSpriteState == 0)
+        {
+            if (EggsTaken)
+            {
+                EggsSpriteState += 2;
+            }
+            else
+            {
+                EggsSpriteState++;
+            }
+        }
+        else if (EggsSpriteState == 1 && !EggsTaken)
+        {
+            EggsSpriteState++;
+            EggsTaken = true;
+        }
+        else if (EggsSpriteState == 2)
+        {
+            EggsSpriteState -= 2;
+        }
+        GameObject.FindGameObjectWithTag("Eggs").GetComponent<Image>().sprite = EggsSprite[EggsSpriteState];
+    }
+
+    public void BackBtn()
+    {
+        SceneManager.LoadScene("Game");
     }
 }
