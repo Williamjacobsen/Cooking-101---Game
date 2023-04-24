@@ -63,7 +63,8 @@ public class Btn : MonoBehaviour
 
             Counter = GameObject.FindGameObjectWithTag("MinutesCounter").GetComponent<TextMeshProUGUI>();
             ClockField = GameObject.FindGameObjectWithTag("ClockField").GetComponent<Transform>();
-            ClockField.position = new Vector3(9999, 15, 5);
+            ClockField.position = new Vector3(9999, 15, 5); 
+            // bug fix, i move it away rather than hiding it, because the i cannot access it
 
             FinishedRecipe = GameObject.FindGameObjectWithTag("FinishedRecipe").GetComponent<Transform>();
             FinishedRecipe.position = new Vector3(9999, 15, 5);
@@ -91,7 +92,7 @@ public class Btn : MonoBehaviour
 
     IEnumerator OnCompleteAnimation(Animator animObj)
     {
-        while(animObj.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        while(animObj.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f) // animation is playing
             yield return null;
             
         foodsArea = GameObject.FindGameObjectWithTag("FoodsArea");
@@ -158,6 +159,7 @@ public class Btn : MonoBehaviour
             tmpList.Add(tasks[0].guide[i].ToString().Split(" "));
         }
 
+        // splits string into a newline for every 8 words
         string tmp;
         for (int i = 0; i < tmpList.Count; i++)
         {
@@ -352,7 +354,6 @@ public class Btn : MonoBehaviour
             EggsSpriteState++;
             EggsTaken = true;
             Inventory.foods.Add("Æg");
-            // todo: Change image to egg image
             Debug.Log("Egg added to foods inventory.");
         }
         else if (EggsSpriteState == 2)
